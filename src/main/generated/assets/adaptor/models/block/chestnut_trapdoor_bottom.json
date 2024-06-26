@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/template_trapdoor_bottom",
-  "textures": {
-    "texture": "adaptor:block/chestnut_trapdoor"
-  }
-}

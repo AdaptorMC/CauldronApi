@@ -1,9 +1,0 @@
-// 1.21	2024-06-24T12:33:17.799029	Adaptor/World Gen
-e44c0df6e3154674d67253c2685824ff2e7a439b data\adaptor\worldgen\placed_feature\gravel_iron_ore_placed.json
-b5c53b0679082b305f28062fe0ee1e8c9b2a0398 data\adaptor\dimension_type\pre_era_dimension_type.json
-4fa1204dfc559fbd59302b1b933e310d84198933 data\adaptor\worldgen\placed_feature\chestnut_placed.json
-27dc7a94e622b274203a7286343ac1a7be251b6f data\adaptor\worldgen\configured_feature\nether_gravel_iron_ore.json
-1b7aa026ad2098a3f7bd83a4218e87c0ff3a50c0 data\adaptor\worldgen\biome\chestnut_biome.json
-2725c1367d2f771be52c8ba684c79d309a9678f9 data\adaptor\worldgen\placed_feature\nether_gravel_iron_ore_key.json
-272df7e1658bda2f309034be3309c2617ee60f1c data\adaptor\worldgen\configured_feature\gravel_iron_ore.json
-b3f317e396f33b4b8d0518125c7d30d52859c555 data\adaptor\worldgen\configured_feature\chestnut.json

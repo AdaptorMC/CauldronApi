@@ -1,7 +1,0 @@
-{
-  "variants": {
-    "": {
-      "model": "adaptor:block/lockable_crate"
-    }
-  }
-}

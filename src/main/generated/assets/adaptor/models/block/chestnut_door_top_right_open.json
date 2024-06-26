@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_right_open",
-  "textures": {
-    "bottom": "adaptor:block/chestnut_door_bottom",
-    "top": "adaptor:block/chestnut_door_top"
-  }
-}
