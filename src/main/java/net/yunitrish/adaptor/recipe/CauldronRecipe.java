@@ -22,7 +22,17 @@ import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
 import java.util.*;
 
 public class CauldronRecipe {
-    protected final SoundEvent sound = SoundEvents.AMBIENT_UNDERWATER_ENTER;
+    private static final Map<String, SoundEvent> DEVICE_SOUNDS = new HashMap<>();
+
+    /**
+     * Change a sound of device when activate
+     */
+    static {
+        DEVICE_SOUNDS.put(CauldronRecipeRegistry.DeviceType.NORMAL.name().toLowerCase(), SoundEvents.AMBIENT_UNDERWATER_ENTER);
+        DEVICE_SOUNDS.put(CauldronRecipeRegistry.DeviceType.BOILED.name().toLowerCase(), SoundEvents.BLOCK_FIRE_EXTINGUISH);
+        DEVICE_SOUNDS.put(CauldronRecipeRegistry.DeviceType.LAVA.name().toLowerCase(), SoundEvents.BLOCK_LAVA_POP);
+        DEVICE_SOUNDS.put(CauldronRecipeRegistry.DeviceType.FREEZE.name().toLowerCase(), SoundEvents.BLOCK_POWDER_SNOW_STEP);
+    }
     private final List<ItemStack> recipeItem = new ArrayList<>();
     private final Map<String, Integer> recipeEntity = new HashMap<>();
     private final List<ItemStack> itemResults = new ArrayList<>();
@@ -81,42 +91,6 @@ public class CauldronRecipe {
     public String getName() {
         return id;
     }
-    /**
-     * Sets the type of the cauldron device.
-     *
-     * @param name the name of the recipe as a string.
-     * @return the updated CauldronRecipe object.
-     * @deprecated Use {@link #CauldronRecipe(net.yunitrish.adaptor.api.CauldronRecipeRegistry.DeviceType, String)} constructor instead of setName.
-     */
-    @Deprecated
-    public CauldronRecipe setName(String name) {
-        this.id = name;
-        return this;
-    }
-
-    /**
-     * Sets the type of the cauldron device.
-     *
-     * @param type the type of the cauldron device as a string.
-     * @return the updated CauldronRecipe object.
-     * @deprecated Use {@link #CauldronRecipe(net.yunitrish.adaptor.api.CauldronRecipeRegistry.DeviceType, String)} constructor instead of setType.
-     */
-    @Deprecated
-    public CauldronRecipe setType(String type) {
-        if (type != null) this.deviceType = type;
-        else this.deviceType = "normal";
-        return this;
-    }
-//    public enum DeviceType {
-//        NORMAL,
-//        BOILED,
-//        LAVA,
-//        FREEZE
-//    }
-    @Deprecated
-    public String getDeviceType() {
-        return deviceType;
-    }
 
     public CauldronRecipe checkDevice() {
         switch (deviceType) {
@@ -141,11 +115,6 @@ public class CauldronRecipe {
                 break;
             }
         }
-        return this;
-    }
-    @Deprecated
-    public CauldronRecipe checkDevice(boolean valid) {
-        this.deviceReady = valid;
         return this;
     }
 
@@ -258,7 +227,10 @@ public class CauldronRecipe {
         ItemStack temp = itemStack.copy();
         temp.setCount(count);
         world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, temp));
-        world.playSound(null, pos, sound, SoundCategory.PLAYERS, 0.8f, 0.5f);
+        SoundEvent sound = DEVICE_SOUNDS.get(deviceType);
+        if (sound != null)
+            world.playSound(null, pos, sound, SoundCategory.PLAYERS, 0.8f, (float) (0.75f + world.getRandom().nextGaussian() / 20f));
+
     }
 
     protected void spawnEntity(World world, BlockPos pos, String entity) {
