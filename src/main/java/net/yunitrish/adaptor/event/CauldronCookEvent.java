@@ -25,13 +25,7 @@ public class CauldronCookEvent implements UseBlockCallback {
         for (CauldronRecipe recipe : CauldronRecipeRegistry.getRecipes()) {
             Adaptor.LOGGER.info("test recipe {}", recipe.getName());
 
-            boolean deviceReady;
-            if (recipe.getDeviceType().equals("normal")) {
-                deviceReady = !world.isClient && world.getBlockState(hitResult.getBlockPos()).getBlock().equals(Blocks.WATER_CAULDRON);
-            } else {
-                deviceReady = false;
-            }
-            if (recipe.set(world, hitResult.getBlockPos()).checkDevice(deviceReady).run(player)) {
+            if (recipe.set(world,hitResult.getBlockPos()).checkDevice().run(player)) {
                 player.sendMessage(Text.of("O"), true);
                 return ActionResult.SUCCESS;
             }
