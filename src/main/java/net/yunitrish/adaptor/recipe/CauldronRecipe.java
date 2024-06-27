@@ -32,6 +32,12 @@ public class CauldronRecipe {
     protected String id;
     protected String deviceType;
     protected boolean deviceReady;
+    public CauldronRecipe() {    }
+
+    public CauldronRecipe(DeviceType type,String recipeName) {
+        this.deviceType = type.name().toLowerCase();
+        this.id = recipeName;
+    }
 
     public CauldronRecipe setRecipeItem(ItemStack... items) {
         recipeItem.addAll(Arrays.asList(items));
@@ -75,18 +81,39 @@ public class CauldronRecipe {
     public String getName() {
         return id;
     }
-
+    /**
+     * Sets the type of the cauldron device.
+     *
+     * @param name the name of the recipe as a string.
+     * @return the updated CauldronRecipe object.
+     * @deprecated Use {@link #CauldronRecipe(DeviceType, String)} constructor instead of setName.
+     */
+    @Deprecated
     public CauldronRecipe setName(String name) {
         this.id = name;
         return this;
     }
 
+    /**
+     * Sets the type of the cauldron device.
+     *
+     * @param type the type of the cauldron device as a string.
+     * @return the updated CauldronRecipe object.
+     * @deprecated Use {@link #CauldronRecipe(DeviceType, String)} constructor instead of setType.
+     */
+    @Deprecated
     public CauldronRecipe setType(String type) {
         if (type != null) this.deviceType = type;
         else this.deviceType = "normal";
         return this;
     }
-
+    public enum DeviceType {
+        NORMAL,
+        BOILED,
+        LAVA,
+        FREEZE
+    }
+    @Deprecated
     public String getDeviceType() {
         return deviceType;
     }
@@ -116,7 +143,7 @@ public class CauldronRecipe {
         }
         return this;
     }
-
+    @Deprecated
     public CauldronRecipe checkDevice(boolean valid) {
         this.deviceReady = valid;
         return this;
