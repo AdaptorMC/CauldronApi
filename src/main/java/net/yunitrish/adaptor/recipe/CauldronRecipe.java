@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
 import net.yunitrish.adaptor.Adaptor;
+import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
 
 import java.util.*;
 
@@ -32,9 +33,8 @@ public class CauldronRecipe {
     protected String id;
     protected String deviceType;
     protected boolean deviceReady;
-    public CauldronRecipe() {    }
 
-    public CauldronRecipe(DeviceType type,String recipeName) {
+    public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName) {
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
     }
@@ -86,7 +86,7 @@ public class CauldronRecipe {
      *
      * @param name the name of the recipe as a string.
      * @return the updated CauldronRecipe object.
-     * @deprecated Use {@link #CauldronRecipe(DeviceType, String)} constructor instead of setName.
+     * @deprecated Use {@link #CauldronRecipe(net.yunitrish.adaptor.api.CauldronRecipeRegistry.DeviceType, String)} constructor instead of setName.
      */
     @Deprecated
     public CauldronRecipe setName(String name) {
@@ -99,7 +99,7 @@ public class CauldronRecipe {
      *
      * @param type the type of the cauldron device as a string.
      * @return the updated CauldronRecipe object.
-     * @deprecated Use {@link #CauldronRecipe(DeviceType, String)} constructor instead of setType.
+     * @deprecated Use {@link #CauldronRecipe(net.yunitrish.adaptor.api.CauldronRecipeRegistry.DeviceType, String)} constructor instead of setType.
      */
     @Deprecated
     public CauldronRecipe setType(String type) {
@@ -107,12 +107,12 @@ public class CauldronRecipe {
         else this.deviceType = "normal";
         return this;
     }
-    public enum DeviceType {
-        NORMAL,
-        BOILED,
-        LAVA,
-        FREEZE
-    }
+//    public enum DeviceType {
+//        NORMAL,
+//        BOILED,
+//        LAVA,
+//        FREEZE
+//    }
     @Deprecated
     public String getDeviceType() {
         return deviceType;
