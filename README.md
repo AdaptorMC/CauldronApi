@@ -30,4 +30,8 @@ In your gradle.properties, set:
 cauldronapi_version = [version]
 
 ```
+Version : [![](https://jitpack.io/v/AdaptorMC/CauldronApi.svg)](https://jitpack.io/#AdaptorMC/CauldronApi)
+
 Replace [version] with the appropriate version of CauldronApi you want to use.
+
+
