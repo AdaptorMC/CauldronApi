@@ -1,6 +1,8 @@
 package net.adaptor.cauldron.recipe;
 
 import net.adaptor.cauldron.CauldronEnhance;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -54,16 +56,33 @@ public class CauldronRecipe {
         return this;
     }
 
-    public CauldronRecipe setRecipeEntity(EntityType<?>... entityTypes) { // IDK IDE recommend So I trust IDE :)
+    public CauldronRecipe setRecipeEntity(EntityType<?>... entityTypes) {
         for (EntityType<?> entityType : entityTypes) {
             recipeEntity.merge(entityType, 1, Integer::sum);
         }
         return this;
     }
+    public CauldronRecipe setRecipeEntity(String... entityIds) {
+        for (String id : entityIds) {
+            if (EntityType.get(id).isPresent()) {
+                recipeEntity.merge(EntityType.get(id).get(), 1, Integer::sum);
+            }
+        }
+        return this;
+    }
 
-    public CauldronRecipe setResultEntity(EntityType<?>... entityTypes) { // IDK IDE recommend So I trust IDE :)
+    public CauldronRecipe setResultEntity(EntityType<?>... entityTypes) {
         for (EntityType<?> entityType : entityTypes) {
             entityResults.merge(entityType, 1, Integer::sum);
+        }
+        return this;
+    }
+
+    public CauldronRecipe setResultEntity(String... entityIds) {
+        for (String id : entityIds) {
+            if (EntityType.get(id).isPresent()) {
+                entityResults.merge(EntityType.get(id).get(), 1, Integer::sum);
+            }
         }
         return this;
     }
@@ -80,27 +99,30 @@ public class CauldronRecipe {
     }
 
     public CauldronRecipe checkDevice() {
+        if (world.isClient) { //Warp check
+            deviceReady = false;
+            return this;
+        }// end warp
+
+        BlockState coreBlockState = world.getBlockState(core); //pre define
+        Block blockAbove = world.getBlockState(core.down()).getBlock(); //pre define
+
         switch (deviceType) {
-            case "normal": {
-                deviceReady = !world.isClient && world.getBlockState(core).getBlock().equals(Blocks.WATER_CAULDRON);
+            case "normal":
+                deviceReady = coreBlockState.getBlock() == Blocks.WATER_CAULDRON;
                 break;
-            }
-            case "boiled": {
-                deviceReady = !world.isClient() && world.getBlockState(core).getBlock() == Blocks.WATER_CAULDRON && world.getBlockState(core.down()).getBlock() == Blocks.CAMPFIRE;
+            case "boiled":
+                deviceReady = coreBlockState.getBlock() == Blocks.WATER_CAULDRON && blockAbove == Blocks.CAMPFIRE;
                 break;
-            }
-            case "lava": {
-                deviceReady = !world.isClient() && world.getBlockState(core).getBlock() == Blocks.LAVA_CAULDRON;
+            case "lava":
+                deviceReady = coreBlockState.getBlock() == Blocks.LAVA_CAULDRON;
                 break;
-            }
-            case "freeze": {
-                deviceReady = !world.isClient() && world.getBlockState(core).getBlock() == Blocks.POWDER_SNOW_CAULDRON;
+            case "freeze":
+                deviceReady = coreBlockState.getBlock() == Blocks.POWDER_SNOW_CAULDRON;
                 break;
-            }
-            default: {
+            default:
                 deviceReady = false;
                 break;
-            }
         }
         return this;
     }
@@ -215,7 +237,7 @@ public class CauldronRecipe {
     protected void spawnEntity(World world, BlockPos pos, EntityType<?> entityType) {
         LivingEntity entity = (LivingEntity) entityType.create(world);
         if (entity != null) {
-            entity.setPos(pos.getX(), pos.getY(), pos.getZ());
+            entity.setPos(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
             world.spawnEntity(entity);
         }
     }
