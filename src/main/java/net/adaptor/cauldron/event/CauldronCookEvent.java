@@ -22,8 +22,7 @@ public class CauldronCookEvent implements UseBlockCallback {
         if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
         if (!player.getMainHandStack().isEmpty()) return ActionResult.PASS;
         for (CauldronRecipe recipe : CauldronRecipeRegistry.getRecipes()) {
-            CauldronEnhance.LOGGER.info("test recipe {}", recipe.getName());
-
+            CauldronEnhance.LOGGER.info("test recipe {}", recipe.getId());
             if (recipe.set(world,hitResult.getBlockPos()).checkDevice().run(player)) {
                 player.sendMessage(Text.of("O"), true);
                 return ActionResult.SUCCESS;

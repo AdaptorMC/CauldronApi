@@ -12,26 +12,26 @@ public class ModCauldronRecipeInit implements CauldronRecipeProvider {
     public void addCauldronRecipes() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
             CauldronRecipe gravel = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "gravel")
-                    .setRecipeItem(Items.GRAVEL.getDefaultStack())
-                    .setResultItem(Items.SAND.getDefaultStack(), Items.FLINT.getDefaultStack());
+                    .setRecipe(Items.GRAVEL.getDefaultStack())
+                    .setResult(Items.SAND.getDefaultStack(), Items.FLINT.getDefaultStack());
             CauldronRecipe sand = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "sand")
-                    .setRecipeItem(Items.SAND.getDefaultStack())
-                    .setResultItem(Items.CLAY.getDefaultStack());
+                    .setRecipe(Items.SAND.getDefaultStack())
+                    .setResult(Items.CLAY.getDefaultStack());
             CauldronRecipe chicken = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "cookChick")
-                    .setRecipeItem(Items.CHICKEN.getDefaultStack())
-                    .setResultItem(Items.COOKED_CHICKEN.getDefaultStack());
+                    .setRecipe(Items.CHICKEN.getDefaultStack())
+                    .setResult(Items.COOKED_CHICKEN.getDefaultStack());
 
             CauldronRecipe recipe = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "test0")
-                    .setRecipeItem(Items.SLIME_BALL.getDefaultStack())
-                    .setResultEntity(EntityType.SLIME);
+                    .setRecipe(Items.SLIME_BALL.getDefaultStack())
+                    .setResult(EntityType.SLIME);
 
             CauldronRecipe reci2pe = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "test1")
-                    .setRecipeEntity(EntityType.SLIME)
-                    .setResultItem(Items.SLIME_BALL.getDefaultStack());
+                    .setRecipe(EntityType.SLIME)
+                    .setResult(Items.SLIME_BALL.getDefaultStack());
 
             CauldronRecipe test = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "test2")
-                    .setRecipeEntity(EntityType.AXOLOTL)
-                    .setResultEntity(EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL);
+                    .setRecipe(EntityType.AXOLOTL)
+                    .setResult(EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL);
 
             CauldronRecipeRegistry.registerRecipe(gravel);
             CauldronRecipeRegistry.registerRecipe(sand);

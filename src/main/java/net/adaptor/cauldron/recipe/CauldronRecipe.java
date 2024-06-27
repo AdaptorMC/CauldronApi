@@ -46,42 +46,44 @@ public class CauldronRecipe {
         this.id = recipeName;
     }
 
-    public CauldronRecipe setRecipeItem(ItemStack... items) {
-        recipeItem.addAll(Arrays.asList(items));
-        return this;
-    }
-
-    public CauldronRecipe setResultItem(ItemStack... items) {
-        itemResults.addAll(Arrays.asList(items));
-        return this;
-    }
-
-    public CauldronRecipe setRecipeEntity(EntityType<?>... entityTypes) {
-        for (EntityType<?> entityType : entityTypes) {
-            recipeEntity.merge(entityType, 1, Integer::sum);
-        }
-        return this;
-    }
-    public CauldronRecipe setRecipeEntity(String... entityIds) {
-        for (String id : entityIds) {
-            if (EntityType.get(id).isPresent()) {
-                recipeEntity.merge(EntityType.get(id).get(), 1, Integer::sum);
+    /**
+     * Dynamically sets recipe items or entities for this Cauldron recipe.
+     *
+     * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
+     * @return This CauldronRecipe instance for method chaining.
+     */
+    // Method to set recipe - (ItemStacks or EntityTypes)
+    public CauldronRecipe setRecipe(Object... itemsOrIds) {
+        for (Object itemOrId : itemsOrIds) {
+            if (itemOrId instanceof ItemStack) {
+                recipeItem.add((ItemStack) itemOrId);
+            } else if (itemOrId instanceof EntityType<?>) {
+                recipeEntity.merge((EntityType<?>) itemOrId, 1, Integer::sum);
+            } else if (itemOrId instanceof String) {
+                if (EntityType.get((String) itemOrId).isPresent()) {
+                    recipeEntity.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+                }
             }
         }
         return this;
     }
-
-    public CauldronRecipe setResultEntity(EntityType<?>... entityTypes) {
-        for (EntityType<?> entityType : entityTypes) {
-            entityResults.merge(entityType, 1, Integer::sum);
-        }
-        return this;
-    }
-
-    public CauldronRecipe setResultEntity(String... entityIds) {
-        for (String id : entityIds) {
-            if (EntityType.get(id).isPresent()) {
-                entityResults.merge(EntityType.get(id).get(), 1, Integer::sum);
+    /**
+     * Dynamically sets result items or entities for this Cauldron recipe.
+     *
+     * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
+     * @return This CauldronRecipe instance for method chaining.
+     */
+    // Method to set result - (ItemStacks or EntityTypes)
+    public CauldronRecipe setResult(Object... itemsOrIds) {
+        for (Object itemOrId : itemsOrIds) {
+            if (itemOrId instanceof ItemStack) {
+                itemResults.add((ItemStack) itemOrId);
+            } else if (itemOrId instanceof EntityType<?>) {
+                entityResults.merge((EntityType<?>) itemOrId, 1, Integer::sum);
+            } else if (itemOrId instanceof String) {
+                if (EntityType.get((String) itemOrId).isPresent()) {
+                    entityResults.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+                }
             }
         }
         return this;
@@ -94,7 +96,7 @@ public class CauldronRecipe {
         return this;
     }
 
-    public String getName() {
+    public String getId() {
         return id;
     }
 
