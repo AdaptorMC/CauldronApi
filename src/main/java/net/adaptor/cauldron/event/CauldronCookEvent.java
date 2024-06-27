@@ -7,7 +7,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import net.adaptor.cauldron.Main;
+import net.adaptor.cauldron.CauldronEnhance;
 import net.adaptor.cauldron.api.CauldronRecipeRegistry;
 import net.adaptor.cauldron.recipe.CauldronRecipe;
 
@@ -22,7 +22,7 @@ public class CauldronCookEvent implements UseBlockCallback {
         if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
         if (!player.getMainHandStack().isEmpty()) return ActionResult.PASS;
         for (CauldronRecipe recipe : CauldronRecipeRegistry.getRecipes()) {
-            Main.LOGGER.info("test recipe {}", recipe.getName());
+            CauldronEnhance.LOGGER.info("test recipe {}", recipe.getName());
 
             if (recipe.set(world,hitResult.getBlockPos()).checkDevice().run(player)) {
                 player.sendMessage(Text.of("O"), true);
