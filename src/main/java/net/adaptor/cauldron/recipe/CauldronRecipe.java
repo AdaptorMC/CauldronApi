@@ -212,7 +212,7 @@ public class CauldronRecipe {
         for (Map.Entry<EntityType<?>, Integer> recipe : recipeEntity.entrySet()) {
             EntityType<?> type = recipe.getKey();
             for (int i = 0; i < maxCount; i++) {
-                entityIngredient.get(type).get(entityIngredient.get(type).size() - 1).kill();
+                entityIngredient.get(type).getLast().kill();
             }
         }
         for (ItemStack result : itemResults) {
