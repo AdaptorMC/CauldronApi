@@ -6,26 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CauldronRecipeRegistry {
-    /**
-     * List of cauldron recipes.
-     * <p>
-     * This list should not be accessed or modified directly. Instead, use the
-     * {@link #registerRecipe(CauldronRecipe)} method to add recipes.
-     * </p>
-     *
-     * <pre>
-     * {@code
-     * // Correct way to add a recipe
-     * CauldronRecipe recipe = new CauldronRecipe();
-     * CauldronCookEvent.registerRecipe(recipe);
-     * }
-     * </pre>
-     *
-     * @see #registerRecipe(CauldronRecipe)
-     */
     private static final List<CauldronRecipe> recipes = new ArrayList<>();
     private static final List<CauldronRecipeProvider> providers = new ArrayList<>();
-    //TODO: this providers are not never queried
 
     /**
      * Registers a new cauldron recipe.
@@ -68,13 +50,31 @@ public class CauldronRecipeRegistry {
      *
      * @param provider the {@link CauldronRecipeProvider} to register.
      */
-
     public static void registerRecipeProvider(CauldronRecipeProvider provider) {
         providers.add(provider);
         provider.addCauldronRecipes();
     }
 
+    /**
+     * Returns the complete list of cauldron recipes, including those from registered providers.
+     * <p>
+     * This method ensures that recipes from all registered providers are included.
+     * </p>
+     *
+     * @return a list of {@link CauldronRecipe}.
+     */
     public static List<CauldronRecipe> getRecipes() {
+        // Ensure all providers have added their recipes
+        for (CauldronRecipeProvider provider : providers) {
+            provider.addCauldronRecipes();
+        }
         return recipes;
     }
+    public enum DeviceType {
+        NORMAL,
+        BOILED,
+        LAVA,
+        FREEZE
+    }
 }
+
