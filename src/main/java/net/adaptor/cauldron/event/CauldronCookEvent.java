@@ -1,16 +1,15 @@
-package net.yunitrish.adaptor.event;
+package net.adaptor.cauldron.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
-import net.yunitrish.adaptor.Adaptor;
-import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
-import net.yunitrish.adaptor.recipe.CauldronRecipe;
+import net.adaptor.cauldron.Main;
+import net.adaptor.cauldron.api.CauldronRecipeRegistry;
+import net.adaptor.cauldron.recipe.CauldronRecipe;
 
 public class CauldronCookEvent implements UseBlockCallback {
     public static int lastTick = -1;
@@ -23,7 +22,7 @@ public class CauldronCookEvent implements UseBlockCallback {
         if (hand != Hand.MAIN_HAND) return ActionResult.PASS;
         if (!player.getMainHandStack().isEmpty()) return ActionResult.PASS;
         for (CauldronRecipe recipe : CauldronRecipeRegistry.getRecipes()) {
-            Adaptor.LOGGER.info("test recipe {}", recipe.getName());
+            Main.LOGGER.info("test recipe {}", recipe.getName());
 
             if (recipe.set(world,hitResult.getBlockPos()).checkDevice().run(player)) {
                 player.sendMessage(Text.of("O"), true);

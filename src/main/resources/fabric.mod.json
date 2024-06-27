@@ -1,26 +1,24 @@
 {
 	"schemaVersion": 1,
-	"id": "adaptor",
+	"id": "cauldron_api",
 	"version": "${version}",
-	"name": "Adaptor",
+	"name": "Cauldron Api",
 	"description": "survive extensions",
 	"authors": [
-		"Yunitrish"
+		"Yunitrish","Sypztep"
 	],
 	"contact": {
-      "homepage": "https://github.com/Yunitrish006006/AdaptorMC/issues",
-      "sources": "https://github.com/Yunitrish006006/AdaptorMC"
+      "homepage": "https://github.com/AdaptorMC/CauldronApi/issues",
+      "sources": "https://github.com/AdaptorMC/CauldronApi"
 	},
 	"license": "MIT",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"net.yunitrish.adaptor.Adaptor"
+			"net.adaptor.cauldron.Main"
 		]
 	},
-	"mixins": [
-		"adaptor.mixins.json"
-	],
+	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.15.11",
 		"minecraft": "~1.21",

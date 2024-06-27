@@ -1,5 +1,6 @@
-package net.yunitrish.adaptor.recipe;
+package net.adaptor.cauldron.recipe;
 
+import net.adaptor.cauldron.Main;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -16,8 +17,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
-import net.yunitrish.adaptor.Adaptor;
-import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
+import net.adaptor.cauldron.api.CauldronRecipeRegistry;
 
 import java.util.*;
 
@@ -119,9 +119,9 @@ public class CauldronRecipe {
     }
 
     public boolean run(PlayerEntity player) {
-        Adaptor.LOGGER.info("{}# entered", id);
+        Main.LOGGER.info("{}# entered", id);
         if (!deviceReady) return false;
-        Adaptor.LOGGER.info("{}# device checked", id);
+        Main.LOGGER.info("{}# device checked", id);
         //list item in cauldron
         Map<Item, ItemEntity> itemIngredient = new HashMap<>();
         for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, itemEntity -> {
@@ -140,7 +140,7 @@ public class CauldronRecipe {
                 itemIngredient.put(itemEntity.getStack().getItem(), itemEntity);
             }
         }
-        Adaptor.LOGGER.info("{}# item ingredient searched", id);
+        Main.LOGGER.info("{}# item ingredient searched", id);
         //list entity in cauldron
         Map<String, List<LivingEntity>> entityIngredient = new HashMap<>();
         for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, box, entity -> {
@@ -159,7 +159,7 @@ public class CauldronRecipe {
                 entityIngredient.put(entityType.getTranslationKey(), List.of(entity));
             }
         }
-        Adaptor.LOGGER.info("{}# entity ingredient searched", id);
+        Main.LOGGER.info("{}# entity ingredient searched", id);
         //check recipe
         int maxCount = Integer.MAX_VALUE;
         for (ItemStack recipe : recipeItem) {
@@ -173,7 +173,7 @@ public class CauldronRecipe {
                 return false;
             }
         }
-        Adaptor.LOGGER.info("{}# item recipe checked", id);
+        Main.LOGGER.info("{}# item recipe checked", id);
         //check entity recipe
         for (Map.Entry<String, Integer> recipe : recipeEntity.entrySet()) {
             String type = recipe.getKey();
@@ -186,14 +186,14 @@ public class CauldronRecipe {
                 return false;
             }
         }
-        Adaptor.LOGGER.info("{}# entity recipe checked", id);
+        Main.LOGGER.info("{}# entity recipe checked", id);
         // cook
         if (player.isSneaking()) {
             cook(maxCount, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
         } else {
             cook(1, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
         }
-        Adaptor.LOGGER.info("{}# cooked", id);
+        Main.LOGGER.info("{}# cooked", id);
         return true;
     }
 

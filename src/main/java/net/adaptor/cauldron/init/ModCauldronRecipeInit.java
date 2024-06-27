@@ -1,9 +1,9 @@
-package net.yunitrish.adaptor.init;
+package net.adaptor.cauldron.init;
 
 import net.minecraft.item.Items;
-import net.yunitrish.adaptor.api.CauldronRecipeProvider;
-import net.yunitrish.adaptor.api.CauldronRecipeRegistry;
-import net.yunitrish.adaptor.recipe.CauldronRecipe;
+import net.adaptor.cauldron.api.CauldronRecipeProvider;
+import net.adaptor.cauldron.api.CauldronRecipeRegistry;
+import net.adaptor.cauldron.recipe.CauldronRecipe;
 
 public class ModCauldronRecipeInit implements CauldronRecipeProvider {
     @Override

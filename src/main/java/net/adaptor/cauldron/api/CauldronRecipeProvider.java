@@ -1,4 +1,4 @@
-package net.yunitrish.adaptor.api;
+package net.adaptor.cauldron.api;
 
 public interface CauldronRecipeProvider {
     /**

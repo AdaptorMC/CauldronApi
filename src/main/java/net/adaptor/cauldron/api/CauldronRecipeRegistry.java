@@ -1,6 +1,6 @@
-package net.yunitrish.adaptor.api;
+package net.adaptor.cauldron.api;
 
-import net.yunitrish.adaptor.recipe.CauldronRecipe;
+import net.adaptor.cauldron.recipe.CauldronRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
