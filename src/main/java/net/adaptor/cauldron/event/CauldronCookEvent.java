@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
@@ -23,10 +24,10 @@ public class CauldronCookEvent implements UseBlockCallback {
 
         for (CauldronRecipe recipe : CauldronRecipeRegistry.getRecipes()) {
             if (recipe.set(world, hitResult.getBlockPos()).checkDevice().run(player)) {
-                player.sendMessage(Text.of("O"), true);
+                player.sendMessage(Text.literal("✓").formatted(Formatting.GREEN), true);
                 return ActionResult.SUCCESS;
             }
-            player.sendMessage(Text.of("X"), true);
+            player.sendMessage(Text.literal("✗").formatted(Formatting.RED), true);
         }
 
         return ActionResult.PASS;
