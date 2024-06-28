@@ -76,5 +76,22 @@ public class CauldronRecipeRegistry {
         LAVA,
         FREEZE
     }
+    public enum WaterConsume {
+        NONE(0),
+        ONE(1),
+        TWO(2),
+        THREE(3);
+
+        private final int amount;
+
+        WaterConsume(int amount) {
+            this.amount = amount;
+        }
+
+        public int getAmount() {
+            return this.amount;
+        }
+    }
+
 }
 
