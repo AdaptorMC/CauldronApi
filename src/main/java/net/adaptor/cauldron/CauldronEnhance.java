@@ -3,6 +3,7 @@ package net.adaptor.cauldron;
 import net.adaptor.cauldron.init.ModCauldronRecipeInit;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import net.adaptor.cauldron.api.CauldronRecipeRegistry;
 import net.adaptor.cauldron.event.CauldronCookEvent;
@@ -19,7 +20,8 @@ public class CauldronEnhance implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		LOGGER.info("Initializing Cauldron API");
-		CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
+		if (FabricLoader.getInstance().isDevelopmentEnvironment()) //Register only dev
+			CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
 		UseBlockCallback.EVENT.register(new CauldronCookEvent());
 	}
 }
