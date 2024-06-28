@@ -25,7 +25,7 @@ dependencies {
     modImplementation "com.github.AdaptorMC:CauldronApi:${project.cauldronapi_version}"
 }
 ```
-In your gradle.properties, set:
+In your `gradle.properties`, set:
 ```groovy
 cauldronapi_version = [version]
 
