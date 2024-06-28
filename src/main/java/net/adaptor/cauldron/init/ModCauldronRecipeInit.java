@@ -33,12 +33,18 @@ public class ModCauldronRecipeInit implements CauldronRecipeProvider {
                     .setRecipe(EntityType.AXOLOTL)
                     .setResult(EntityType.AXOLOTL, EntityType.AXOLOTL);
 
+            CauldronRecipe food = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "food")
+                    .setRecipe(Items.BOWL, Items.BROWN_MUSHROOM, Items.RED_MUSHROOM)
+                    .setResult(Items.MUSHROOM_STEW);
+
+
             CauldronRecipeRegistry.registerRecipe(gravel);
             CauldronRecipeRegistry.registerRecipe(sand);
             CauldronRecipeRegistry.registerRecipe(chicken);
             CauldronRecipeRegistry.registerRecipe(recipe);
             CauldronRecipeRegistry.registerRecipe(reci2pe);
             CauldronRecipeRegistry.registerRecipe(test);
+            CauldronRecipeRegistry.registerRecipe(food);
         }
     }
 }
