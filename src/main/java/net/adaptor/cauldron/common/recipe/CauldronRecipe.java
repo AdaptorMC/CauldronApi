@@ -375,6 +375,9 @@ public class CauldronRecipe {
         if (entity != null) {
             entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
             world.spawnEntity(entity);
+            SoundEvent sound = DEVICE_SOUNDS.get(deviceType);
+            if (sound != null)
+                world.playSound(null, pos, sound, SoundCategory.PLAYERS, 0.8f, (float) (0.75f + world.getRandom().nextGaussian() / 20f));
         }
     }
 }
