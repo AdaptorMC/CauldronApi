@@ -41,10 +41,17 @@ public class CauldronRecipe {
     protected String deviceType;
     protected boolean deviceReady;
 
+    /**
+     * Constructs a new CauldronRecipe with the specified device type and recipe name.
+     *
+     * @param type       The type of the cauldron device (NORMAL, BOILED, LAVA, FREEZE).
+     * @param recipeName The name of the recipe.
+     */
     public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName) {
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
     }
+
     // Default Set
     public CauldronRecipe setRecipeItem(ItemStack... items) {
         recipeItem.addAll(Arrays.asList(items));
@@ -62,6 +69,7 @@ public class CauldronRecipe {
         }
         return this;
     }
+
     public CauldronRecipe setRecipeEntity(String... entityIds) {
         for (String id : entityIds) {
             if (EntityType.get(id).isPresent()) {
@@ -87,12 +95,30 @@ public class CauldronRecipe {
         return this;
     }
     // Dynamic Set
+
     /**
      * Dynamically sets recipe items or entities for this Cauldron recipe.
      *
      * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
      * @return This CauldronRecipe instance for method chaining.
+     * <pre>
+     *{@code
+     *       public class MyModCauldronRecipes implements CauldronRecipeProvider {
+     *           @Override
+     *           public void addCauldronRecipes() {
+     *               CauldronRecipe chicken = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "cookChick")
+     *                     .setRecipe(Items.CHICKEN.getDefaultStack())
+     *                     .setResult(Items.COOKED_CHICKEN.getDefaultStack());
+     *               CauldronRecipeRegistry.registerRecipe(recipe);
+     *           }
+     *       }
+     *}
+     *</pre>
+     * <p>
+     *     this one is dynamic setResult/Recipe
+     * </p>
      */
+
     // Method to set recipe - (ItemStacks or EntityTypes)
     public CauldronRecipe setRecipe(Object... itemsOrIds) {
         for (Object itemOrId : itemsOrIds) {
@@ -108,6 +134,7 @@ public class CauldronRecipe {
         }
         return this;
     }
+
     /**
      * Dynamically sets result items or entities for this Cauldron recipe.
      *
@@ -280,7 +307,7 @@ public class CauldronRecipe {
     protected void spawnEntity(World world, BlockPos pos, EntityType<?> entityType) {
         LivingEntity entity = (LivingEntity) entityType.create(world);
         if (entity != null) {
-            entity.setPos(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5);
+            entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
             world.spawnEntity(entity);
         }
     }
