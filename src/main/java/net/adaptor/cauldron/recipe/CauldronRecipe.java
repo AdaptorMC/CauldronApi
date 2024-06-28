@@ -92,11 +92,8 @@ public class CauldronRecipe {
         }
         return this;
     }
-    // Dynamic Set
-
     /**
-     * <h1>This method is o(n) you with your own risk</h1>
-     *
+     * <h1>Dynamic Registry | This method is O(n) using with your own risk</h1>
      * Dynamically sets recipe items or entities for this Cauldron recipe.
      *
      * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
