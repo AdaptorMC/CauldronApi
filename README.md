@@ -27,7 +27,7 @@ dependencies {
 ```
 In your `gradle.properties`, set:
 ```groovy
-cauldronapi_version = [version]
+cauldronapi_version = [version] // without [ ] 'bracket'
 
 ```
 Version : [![](https://jitpack.io/v/AdaptorMC/CauldronApi.svg)](https://jitpack.io/#AdaptorMC/CauldronApi)
