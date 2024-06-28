@@ -38,7 +38,21 @@ public class CauldronRecipe {
     protected String id;
     protected String deviceType;
     protected boolean deviceReady;
+    protected CauldronRecipeRegistry.WaterConsume waterConsumeWater;
 
+
+    /**
+     * Constructs a new CauldronRecipe with the specified device type and recipe name and waterconsume.
+     *
+     * @param type The type of the cauldron device (NORMAL, BOILED, LAVA, FREEZE).
+     * @param recipeName The name of the recipe.
+     * @param waterConsumeWater The Amount of recipe that gonna consume <p>NONE</p> for don't consume.
+     */
+    public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName, CauldronRecipeRegistry.WaterConsume waterConsumeWater) {
+        this.deviceType = type.name().toLowerCase();
+        this.id = recipeName;
+        this.waterConsumeWater = waterConsumeWater;
+    }
     /**
      * Constructs a new CauldronRecipe with the specified device type and recipe name.
      *
@@ -48,6 +62,7 @@ public class CauldronRecipe {
     public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName) {
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
+        this.waterConsumeWater = CauldronRecipeRegistry.WaterConsume.NONE;
     }
 
     // Default Set
@@ -92,11 +107,16 @@ public class CauldronRecipe {
         }
         return this;
     }
+    public CauldronRecipe setConsumeAmount(CauldronRecipeRegistry.WaterConsume consumeAmount) {
+        this.waterConsumeWater = consumeAmount;
+        return this;
+    }
+
     /**
      * <h1>Dynamic Registry | This method is O(n) using with your own risk</h1>
      * Dynamically sets recipe items or entities for this Cauldron recipe.
      *
-     * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
+     * @param itemsOrIds Varargs representing ItemStacks, Item, EntityTypes, or entity IDs (as Strings).
      * @return This CauldronRecipe instance for method chaining.
      * <pre>
      * {@code
@@ -138,7 +158,7 @@ public class CauldronRecipe {
     /**
      * Dynamically sets result items or entities for this Cauldron recipe.
      *
-     * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
+     * @param itemsOrIds Varargs representing ItemStacks, Item, EntityTypes, or entity IDs (as Strings).
      * @return This CauldronRecipe instance for method chaining.
      */
     // Method to set result - (ItemStacks or EntityTypes)
@@ -255,16 +275,30 @@ public class CauldronRecipe {
                 return false;
             }
         }
-        // cook task
-        if (player.isSneaking()) {
-            cook(maxCount, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
-        } else {
-            cook(1, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
+        //-------- Water Amount Check ---------//
+        int consumeAmount = waterConsumeWater.getAmount();
+        BlockState coreBlockState = world.getBlockState(core);
+        int currentWaterLevel = coreBlockState.get(Properties.LEVEL_3);
+
+        if (consumeAmount > 0 && coreBlockState.getBlock() == Blocks.WATER_CAULDRON) {
+            maxCount = Math.min(maxCount, currentWaterLevel / consumeAmount);
+            if (player.isSneaking())
+                maxCount = currentWaterLevel / consumeAmount;
         }
 
-        // Decrease the water level in the cauldron after running the recipe
-        decreaseWater(world, core);
-        return true;
+        //-------- Cooking Task ---------//
+        if (maxCount > 0) {
+            if (player.isSneaking()) {
+                cook(maxCount, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
+                decreaseWater(world, core, maxCount * consumeAmount); // Consume water based on maxCount
+            } else {
+                cook(1, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
+                if (consumeAmount > 0)
+                    decreaseWater(world, core, consumeAmount); // Consume fixed amount of water
+            }
+            return true;
+        } else
+            return false;
     }
 
     protected void cook(
@@ -283,6 +317,7 @@ public class CauldronRecipe {
                 entityIngredient.get(type).getLast().kill();
             }
         }
+        //do cook task
         for (ItemStack result : itemResults) {
             spawnItem(world, core, result, maxCount);
         }
@@ -292,18 +327,25 @@ public class CauldronRecipe {
             }
         }
     }
-    //Feature : decrease a water
-    private void decreaseWater(World world, BlockPos core) {
-        BlockState coreBlockState = world.getBlockState(core); // get the current state of the cauldron
-        boolean WaterCauldron = coreBlockState.getBlock() == Blocks.WATER_CAULDRON && coreBlockState.get(Properties.LEVEL_3) >= 1;
 
-        if (WaterCauldron) {
+    /**
+     * @param world world
+     * @param core cauldron block
+     * @param amount Amount that get from Enum type
+     */
+    //Feature : decrease a water (max 3)
+    private void decreaseWater(World world, BlockPos core, int amount) {
+        BlockState coreBlockState = world.getBlockState(core); // get the current state of the cauldron
+        if (coreBlockState.getBlock() == Blocks.WATER_CAULDRON) {
             int currentLevel = coreBlockState.get(Properties.LEVEL_3); // get the current water level
             if (currentLevel > 0) {
-                int newLevel = currentLevel - 1; // decrease the water level by 1
+                int newLevel = currentLevel - Math.min(3, amount); // decrease the water level by the amount specified by the enum
 
-                if (newLevel == 0) world.setBlockState(core, Blocks.CAULDRON.getDefaultState(), 3);
-                 else world.setBlockState(core, coreBlockState.with(Properties.LEVEL_3, newLevel), 3);
+                if (newLevel == 0)
+                    world.setBlockState(core, Blocks.CAULDRON.getDefaultState(), 3);
+                 else
+                    world.setBlockState(core, coreBlockState.with(Properties.LEVEL_3, newLevel), 3);
+
             }
         }
     }
