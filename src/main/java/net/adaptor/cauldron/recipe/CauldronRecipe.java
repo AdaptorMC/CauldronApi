@@ -1,9 +1,6 @@
 package net.adaptor.cauldron.recipe;
 
-import net.adaptor.cauldron.CauldronEnhance;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -97,25 +95,27 @@ public class CauldronRecipe {
     // Dynamic Set
 
     /**
+     * <h1>This method is o(n) you with your own risk</h1>
+     *
      * Dynamically sets recipe items or entities for this Cauldron recipe.
      *
      * @param itemsOrIds Varargs representing ItemStacks, EntityTypes, or entity IDs (as Strings).
      * @return This CauldronRecipe instance for method chaining.
      * <pre>
-     *{@code
+     * {@code
      *       public class MyModCauldronRecipes implements CauldronRecipeProvider {
      *           @Override
      *           public void addCauldronRecipes() {
      *               CauldronRecipe chicken = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "cookChick")
-     *                     .setRecipe(Items.CHICKEN.getDefaultStack())
+     *                     .setRecipe(Items.CHICKEN.getDefaultStack()) // Can .setRecipe(Items.CHICKEN) too cuz why not People lazy like me love to do :)
      *                     .setResult(Items.COOKED_CHICKEN.getDefaultStack());
      *               CauldronRecipeRegistry.registerRecipe(recipe);
      *           }
      *       }
-     *}
-     *</pre>
+     * }
+     * </pre>
      * <p>
-     *     this one is dynamic setResult/Recipe
+     * this one is dynamic setResult/Recipe
      * </p>
      */
 
@@ -124,6 +124,8 @@ public class CauldronRecipe {
         for (Object itemOrId : itemsOrIds) {
             if (itemOrId instanceof ItemStack) {
                 recipeItem.add((ItemStack) itemOrId);
+            } else if (itemOrId instanceof Item) {
+                recipeItem.add(((Item) itemOrId).getDefaultStack());
             } else if (itemOrId instanceof EntityType<?>) {
                 recipeEntity.merge((EntityType<?>) itemOrId, 1, Integer::sum);
             } else if (itemOrId instanceof String) {
@@ -134,6 +136,7 @@ public class CauldronRecipe {
         }
         return this;
     }
+
 
     /**
      * Dynamically sets result items or entities for this Cauldron recipe.
@@ -146,6 +149,8 @@ public class CauldronRecipe {
         for (Object itemOrId : itemsOrIds) {
             if (itemOrId instanceof ItemStack) {
                 itemResults.add((ItemStack) itemOrId);
+            } else if (itemOrId instanceof Item) {
+                itemResults.add(((Item) itemOrId).getDefaultStack());
             } else if (itemOrId instanceof EntityType<?>) {
                 entityResults.merge((EntityType<?>) itemOrId, 1, Integer::sum);
             } else if (itemOrId instanceof String) {
@@ -163,7 +168,7 @@ public class CauldronRecipe {
         this.box = Box.of(core.toCenterPos(), 0.5, 0.5, 0.5);
         return this;
     }
-
+    @Deprecated //Using for debug
     public String getId() {
         return id;
     }
@@ -175,14 +180,16 @@ public class CauldronRecipe {
         }// end warp
 
         BlockState coreBlockState = world.getBlockState(core); //pre define
-        Block blockAbove = world.getBlockState(core.down()).getBlock(); //pre define
+        BlockState blockBelow = world.getBlockState(core.down()); //pre define
+
+        boolean WaterCauldron = coreBlockState.getBlock() == Blocks.WATER_CAULDRON && coreBlockState.get(Properties.LEVEL_3) >= 1; // 1 is the lowest level water of cauldron if no what the stats of cauldron is nolonger LEVL_3
 
         switch (deviceType) {
             case "normal":
-                deviceReady = coreBlockState.getBlock() == Blocks.WATER_CAULDRON;
+                deviceReady = WaterCauldron;
                 break;
             case "boiled":
-                deviceReady = coreBlockState.getBlock() == Blocks.WATER_CAULDRON && blockAbove == Blocks.CAMPFIRE;
+                deviceReady = WaterCauldron && blockBelow.getBlock() instanceof CampfireBlock && blockBelow.get(CampfireBlock.LIT); // More check is campfire is lit
                 break;
             case "lava":
                 deviceReady = coreBlockState.getBlock() == Blocks.LAVA_CAULDRON;
@@ -198,16 +205,12 @@ public class CauldronRecipe {
     }
 
     public boolean run(PlayerEntity player) {
-        CauldronEnhance.LOGGER.info("{}# entered", id);
         if (!deviceReady) return false;
-        CauldronEnhance.LOGGER.info("{}# device checked", id);
         Map<Item, ItemEntity> itemIngredient = new HashMap<>();
         for (ItemEntity itemEntity : world.getEntitiesByClass(ItemEntity.class, box, itemEntity -> {
-            for (ItemStack recipe : recipeItem) {
-                if (recipe.getItem() == itemEntity.getStack().getItem()) {
+            for (ItemStack recipe : recipeItem)
+                if (recipe.getItem() == itemEntity.getStack().getItem())
                     return true;
-                }
-            }
             return false;
         })) {
             Item type = itemEntity.getStack().getItem();
@@ -217,7 +220,6 @@ public class CauldronRecipe {
                 return existing;
             });
         }
-        CauldronEnhance.LOGGER.info("{}# item ingredient searched", id);
 
         Map<EntityType<?>, List<LivingEntity>> entityIngredient = new HashMap<>();
         for (LivingEntity entity : world.getEntitiesByClass(LivingEntity.class, box, entity -> {
@@ -231,7 +233,6 @@ public class CauldronRecipe {
             EntityType<?> entityType = entity.getType();
             entityIngredient.computeIfAbsent(entityType, k -> new ArrayList<>()).add(entity);
         }
-        CauldronEnhance.LOGGER.info("{}# entity ingredient searched", id);
 
         int maxCount = Integer.MAX_VALUE;
         for (ItemStack recipe : recipeItem) {
@@ -245,7 +246,6 @@ public class CauldronRecipe {
                 return false;
             }
         }
-        CauldronEnhance.LOGGER.info("{}# item recipe checked", id);
         //check entity recipe
         for (Map.Entry<EntityType<?>, Integer> recipe : recipeEntity.entrySet()) {
             EntityType<?> type = recipe.getKey(); //Change from String to EntityType
@@ -258,14 +258,15 @@ public class CauldronRecipe {
                 return false;
             }
         }
-        CauldronEnhance.LOGGER.info("{}# entity recipe checked", id);
         // cook task
         if (player.isSneaking()) {
             cook(maxCount, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
         } else {
             cook(1, world, core, recipeItem, recipeEntity, itemIngredient, entityIngredient, itemResults, entityResults);
         }
-        CauldronEnhance.LOGGER.info("{}# cooked", id);
+
+        // Decrease the water level in the cauldron after running the recipe
+        decreaseWater(world, core);
         return true;
     }
 
@@ -294,6 +295,22 @@ public class CauldronRecipe {
             }
         }
     }
+    //Feature : decrease a water
+    private void decreaseWater(World world, BlockPos core) {
+        BlockState coreBlockState = world.getBlockState(core); // get the current state of the cauldron
+        boolean WaterCauldron = coreBlockState.getBlock() == Blocks.WATER_CAULDRON && coreBlockState.get(Properties.LEVEL_3) >= 1;
+
+        if (WaterCauldron) {
+            int currentLevel = coreBlockState.get(Properties.LEVEL_3); // get the current water level
+            if (currentLevel > 0) {
+                int newLevel = currentLevel - 1; // decrease the water level by 1
+
+                if (newLevel == 0) world.setBlockState(core, Blocks.CAULDRON.getDefaultState(), 3);
+                 else world.setBlockState(core, coreBlockState.with(Properties.LEVEL_3, newLevel), 3);
+            }
+        }
+    }
+
 
     protected void spawnItem(World world, BlockPos pos, ItemStack itemStack, int count) {
         ItemStack temp = itemStack.copy();
