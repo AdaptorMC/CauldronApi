@@ -1,7 +1,6 @@
 package net.adaptor.cauldron.common;
 
 import net.adaptor.cauldron.common.init.ModCauldronRecipe;
-import net.adaptor.cauldron.common.init.ModParticles;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
@@ -20,7 +19,6 @@ public class CauldronEnhance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		ModParticles.init();
 		LOGGER.info("Initializing Cauldron API");
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) //Register only dev
 			CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipe());
