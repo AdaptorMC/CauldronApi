@@ -8,12 +8,12 @@ import net.adaptor.cauldron.api.CauldronRecipeRegistry;
 import net.adaptor.cauldron.recipe.CauldronRecipe;
 
 public class ModCauldronRecipeInit implements CauldronRecipeProvider {
+    static CauldronRecipe gravel = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "gravel")
+            .setRecipe(Items.GRAVEL.getDefaultStack())
+            .setResult(Items.SAND.getDefaultStack(), Items.FLINT.getDefaultStack());
     @Override
     public void addCauldronRecipes() {
         if (FabricLoader.getInstance().isDevelopmentEnvironment()) {
-            CauldronRecipe gravel = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "gravel")
-                    .setRecipe(Items.GRAVEL.getDefaultStack())
-                    .setResult(Items.SAND.getDefaultStack(), Items.FLINT.getDefaultStack());
             CauldronRecipe sand = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "sand")
                     .setRecipe(Items.SAND.getDefaultStack())
                     .setResult(Items.CLAY.getDefaultStack());
@@ -31,7 +31,7 @@ public class ModCauldronRecipeInit implements CauldronRecipeProvider {
 
             CauldronRecipe test = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.BOILED, "test2")
                     .setRecipe(EntityType.AXOLOTL)
-                    .setResult(EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL, EntityType.AXOLOTL);
+                    .setResult(EntityType.AXOLOTL, EntityType.AXOLOTL);
 
             CauldronRecipeRegistry.registerRecipe(gravel);
             CauldronRecipeRegistry.registerRecipe(sand);
