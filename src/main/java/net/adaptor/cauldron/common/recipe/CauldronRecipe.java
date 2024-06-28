@@ -49,6 +49,9 @@ public class CauldronRecipe {
      * @param waterConsumeWater The Amount of recipe that gonna consume <p>NONE</p> for don't consume.
      */
     public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName, CauldronRecipeRegistry.WaterConsume waterConsumeWater) {
+        if (type == null || recipeName == null || waterConsumeWater == null) {
+            throw new NullPointerException("Constructor arguments cannot be null");
+        }
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
         this.waterConsumeWater = waterConsumeWater;
@@ -60,6 +63,9 @@ public class CauldronRecipe {
      * @param recipeName The name of the recipe.
      */
     public CauldronRecipe(CauldronRecipeRegistry.DeviceType type, String recipeName) {
+        if (type == null || recipeName == null) {
+            throw new NullPointerException("Constructor arguments cannot be null");
+        }
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
         this.waterConsumeWater = CauldronRecipeRegistry.WaterConsume.NONE;
@@ -139,15 +145,17 @@ public class CauldronRecipe {
     // Method to set recipe - (ItemStacks or EntityTypes)
     public CauldronRecipe setRecipe(Object... itemsOrIds) {
         for (Object itemOrId : itemsOrIds) {
-            if (itemOrId instanceof ItemStack) {
-                recipeItem.add((ItemStack) itemOrId);
-            } else if (itemOrId instanceof Item) {
-                recipeItem.add(((Item) itemOrId).getDefaultStack());
-            } else if (itemOrId instanceof EntityType<?>) {
-                recipeEntity.merge((EntityType<?>) itemOrId, 1, Integer::sum);
-            } else if (itemOrId instanceof String) {
-                if (EntityType.get((String) itemOrId).isPresent()) {
-                    recipeEntity.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+            switch (itemOrId) { //IDE ? are you sure?
+                case null -> throw new NullPointerException("Null value detected in setRecipe method");
+                case ItemStack itemStack -> recipeItem.add(itemStack);
+                case Item item -> recipeItem.add(item.getDefaultStack());
+                case EntityType<?> entityType -> recipeEntity.merge(entityType, 1, Integer::sum);
+                case String s -> {
+                    if (EntityType.get(s).isPresent()) {
+                        recipeEntity.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+                    }
+                }
+                default -> {
                 }
             }
         }
@@ -164,15 +172,17 @@ public class CauldronRecipe {
     // Method to set result - (ItemStacks or EntityTypes)
     public CauldronRecipe setResult(Object... itemsOrIds) {
         for (Object itemOrId : itemsOrIds) {
-            if (itemOrId instanceof ItemStack) {
-                itemResults.add((ItemStack) itemOrId);
-            } else if (itemOrId instanceof Item) {
-                itemResults.add(((Item) itemOrId).getDefaultStack());
-            } else if (itemOrId instanceof EntityType<?>) {
-                entityResults.merge((EntityType<?>) itemOrId, 1, Integer::sum);
-            } else if (itemOrId instanceof String) {
-                if (EntityType.get((String) itemOrId).isPresent()) {
-                    entityResults.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+            switch (itemOrId) { //IDE ? are you sure?
+                case null -> throw new NullPointerException("Null value detected in setResult method");
+                case ItemStack itemStack -> itemResults.add(itemStack);
+                case Item item -> itemResults.add(item.getDefaultStack());
+                case EntityType<?> entityType -> entityResults.merge(entityType, 1, Integer::sum);
+                case String s -> {
+                    if (EntityType.get(s).isPresent()) {
+                        entityResults.merge(EntityType.get((String) itemOrId).get(), 1, Integer::sum);
+                    }
+                }
+                default -> {
                 }
             }
         }
