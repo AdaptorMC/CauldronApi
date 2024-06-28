@@ -311,7 +311,7 @@ public class CauldronRecipe {
             return false;
     }
 
-    protected void cook(
+    private void cook(
             int maxCount, World world, BlockPos core,
             List<ItemStack> recipeItem, Map<EntityType<?>, Integer> recipeEntity,
             Map<Item, ItemEntity> itemIngredient, Map<EntityType<?>, List<LivingEntity>> entityIngredient,
@@ -359,9 +359,9 @@ public class CauldronRecipe {
             }
         }
     }
+    // I change to private cuz it only use in own class
 
-
-    protected void spawnItem(World world, BlockPos pos, ItemStack itemStack, int count) {
+    private void spawnItem(World world, BlockPos pos, ItemStack itemStack, int count) {
         ItemStack temp = itemStack.copy();
         temp.setCount(count);
         world.spawnEntity(new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, temp));
@@ -370,7 +370,7 @@ public class CauldronRecipe {
             world.playSound(null, pos, sound, SoundCategory.PLAYERS, 0.8f, (float) (0.75f + world.getRandom().nextGaussian() / 20f));
     }
 
-    protected void spawnEntity(World world, BlockPos pos, EntityType<?> entityType) {
+    private void spawnEntity(World world, BlockPos pos, EntityType<?> entityType) {
         LivingEntity entity = (LivingEntity) entityType.create(world);
         if (entity != null) {
             entity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
