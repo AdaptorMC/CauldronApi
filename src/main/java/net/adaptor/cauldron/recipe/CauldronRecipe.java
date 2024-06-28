@@ -45,7 +45,48 @@ public class CauldronRecipe {
         this.deviceType = type.name().toLowerCase();
         this.id = recipeName;
     }
+    // Default Set
+    public CauldronRecipe setRecipeItem(ItemStack... items) {
+        recipeItem.addAll(Arrays.asList(items));
+        return this;
+    }
 
+    public CauldronRecipe setResultItem(ItemStack... items) {
+        itemResults.addAll(Arrays.asList(items));
+        return this;
+    }
+
+    public CauldronRecipe setRecipeEntity(EntityType<?>... entityTypes) {
+        for (EntityType<?> entityType : entityTypes) {
+            recipeEntity.merge(entityType, 1, Integer::sum);
+        }
+        return this;
+    }
+    public CauldronRecipe setRecipeEntity(String... entityIds) {
+        for (String id : entityIds) {
+            if (EntityType.get(id).isPresent()) {
+                recipeEntity.merge(EntityType.get(id).get(), 1, Integer::sum);
+            }
+        }
+        return this;
+    }
+
+    public CauldronRecipe setResultEntity(EntityType<?>... entityTypes) {
+        for (EntityType<?> entityType : entityTypes) {
+            entityResults.merge(entityType, 1, Integer::sum);
+        }
+        return this;
+    }
+
+    public CauldronRecipe setResultEntity(String... entityIds) {
+        for (String id : entityIds) {
+            if (EntityType.get(id).isPresent()) {
+                entityResults.merge(EntityType.get(id).get(), 1, Integer::sum);
+            }
+        }
+        return this;
+    }
+    // Dynamic Set
     /**
      * Dynamically sets recipe items or entities for this Cauldron recipe.
      *
