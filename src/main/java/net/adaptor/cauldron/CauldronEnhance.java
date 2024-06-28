@@ -18,7 +18,7 @@ public class CauldronEnhance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		LOGGER.info("Initializing Testing API");
+		LOGGER.info("Initializing Cauldron API");
 		CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
 		UseBlockCallback.EVENT.register(new CauldronCookEvent());
 	}
