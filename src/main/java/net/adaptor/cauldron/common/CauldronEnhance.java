@@ -1,12 +1,13 @@
-package net.adaptor.cauldron;
+package net.adaptor.cauldron.common;
 
-import net.adaptor.cauldron.init.ModCauldronRecipeInit;
+import net.adaptor.cauldron.common.init.ModCauldronRecipe;
+import net.adaptor.cauldron.common.init.ModParticles;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.util.Identifier;
 import net.adaptor.cauldron.api.CauldronRecipeRegistry;
-import net.adaptor.cauldron.event.CauldronCookEvent;
+import net.adaptor.cauldron.common.event.CauldronCookEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +20,10 @@ public class CauldronEnhance implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModParticles.init();
 		LOGGER.info("Initializing Cauldron API");
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) //Register only dev
-			CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
+			CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipe());
 		UseBlockCallback.EVENT.register(new CauldronCookEvent());
 	}
 }

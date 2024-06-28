@@ -1,4 +1,4 @@
-package net.adaptor.cauldron.event;
+package net.adaptor.cauldron.common.event;
 
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,7 +9,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.world.World;
 import net.adaptor.cauldron.api.CauldronRecipeRegistry;
-import net.adaptor.cauldron.recipe.CauldronRecipe;
+import net.adaptor.cauldron.common.recipe.CauldronRecipe;
 
 public class CauldronCookEvent implements UseBlockCallback {
     public static int lastTick = -1;

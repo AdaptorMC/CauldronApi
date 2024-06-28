@@ -1,4 +1,4 @@
-package net.adaptor.cauldron.recipe;
+package net.adaptor.cauldron.common.recipe;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.EntityType;

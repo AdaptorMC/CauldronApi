@@ -1,12 +1,12 @@
-package net.adaptor.cauldron.init;
+package net.adaptor.cauldron.common.init;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
 import net.adaptor.cauldron.api.CauldronRecipeProvider;
 import net.adaptor.cauldron.api.CauldronRecipeRegistry;
-import net.adaptor.cauldron.recipe.CauldronRecipe;
+import net.adaptor.cauldron.common.recipe.CauldronRecipe;
 
-public class ModCauldronRecipeInit implements CauldronRecipeProvider {
+public class ModCauldronRecipe implements CauldronRecipeProvider {
     static final CauldronRecipe[] recipes = {
             new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "gravel", CauldronRecipeRegistry.WaterConsume.NONE)
                     .setRecipe(Items.GRAVEL.getDefaultStack())
@@ -39,7 +39,7 @@ public class ModCauldronRecipeInit implements CauldronRecipeProvider {
 
 
     @Override
-    public void addCauldronRecipes() {
+    public void init() {
         // Register each CauldronRecipe in the recipes array
         for (CauldronRecipe recipe : recipes) {
             CauldronRecipeRegistry.registerRecipe(recipe);

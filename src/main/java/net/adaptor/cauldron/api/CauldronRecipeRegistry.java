@@ -1,6 +1,6 @@
 package net.adaptor.cauldron.api;
 
-import net.adaptor.cauldron.recipe.CauldronRecipe;
+import net.adaptor.cauldron.common.recipe.CauldronRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class CauldronRecipeRegistry {
      */
     public static void registerRecipeProvider(CauldronRecipeProvider provider) {
         providers.add(provider);
-        provider.addCauldronRecipes();
+        provider.init();
     }
 
     /**
@@ -66,7 +66,7 @@ public class CauldronRecipeRegistry {
     public static List<CauldronRecipe> getRecipes() {
         // Ensure all providers have added their recipes
         for (CauldronRecipeProvider provider : providers) {
-            provider.addCauldronRecipes();
+            provider.init();
         }
         return recipes;
     }
