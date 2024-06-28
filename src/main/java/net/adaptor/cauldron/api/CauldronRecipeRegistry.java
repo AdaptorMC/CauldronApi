@@ -1,5 +1,6 @@
 package net.adaptor.cauldron.api;
 
+import net.adaptor.cauldron.common.CauldronEnhance;
 import net.adaptor.cauldron.common.recipe.CauldronRecipe;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class CauldronRecipeRegistry {
      * {@code
      * // Example usage
      * CauldronRecipe recipe = new CauldronRecipe();
-     * CauldronCookEvent.registerRecipe(recipe);
+     * CauldronRecipeRegistry.registerRecipe(recipe);
      * }
      * </pre>
      *
@@ -40,9 +41,9 @@ public class CauldronRecipeRegistry {
      * {@code
      * // Example usage in your mod's initialization class
      * public class MainMethod implements ModInitializer {
-     *     public static void init() {
-     *         CauldronCookEvent.registerRecipeProvider(new YourModInit());
-     *         CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipeInit());
+     *     @Override
+     *     public void onInitialize() {
+     *         CauldronRecipeRegistry.registerRecipeProvider(new YourCauldronRecipe());
      *     }
      * }
      * }
@@ -54,6 +55,13 @@ public class CauldronRecipeRegistry {
         providers.add(provider);
         provider.init();
     }
+    /**
+     * Ensures that all providers have added their recipes.
+     * This method should be called once all recipes and providers have been registered.
+     */
+    public static void initializeRecipes() {
+        CauldronEnhance.LOGGER.info("Loaded {} recipes", recipes.size());
+    }
 
     /**
      * Returns the complete list of cauldron recipes, including those from registered providers.
@@ -64,18 +72,19 @@ public class CauldronRecipeRegistry {
      * @return a list of {@link CauldronRecipe}.
      */
     public static List<CauldronRecipe> getRecipes() {
-        // Ensure all providers have added their recipes
         for (CauldronRecipeProvider provider : providers) {
             provider.init();
         }
         return recipes;
     }
+
     public enum DeviceType {
         NORMAL,
         BOILED,
         LAVA,
         FREEZE
     }
+
     public enum WaterConsume {
         NONE(0),
         ONE(1),
@@ -92,6 +101,7 @@ public class CauldronRecipeRegistry {
             return this.amount;
         }
     }
-
 }
+
+
 

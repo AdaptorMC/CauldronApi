@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class CauldronEnhance implements ModInitializer {
 	public static final String MOD_ID = "cauldron_api";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+	public static final Logger LOGGER = LoggerFactory.getLogger("Cauldron API");
 	public static Identifier id(String name) {
 		return Identifier.of(CauldronEnhance.MOD_ID, name);
 	}
@@ -25,5 +25,7 @@ public class CauldronEnhance implements ModInitializer {
 		if (FabricLoader.getInstance().isDevelopmentEnvironment()) //Register only dev
 			CauldronRecipeRegistry.registerRecipeProvider(new ModCauldronRecipe());
 		UseBlockCallback.EVENT.register(new CauldronCookEvent());
+
+		CauldronRecipeRegistry.initializeRecipes();
 	}
 }
