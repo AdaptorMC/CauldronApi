@@ -11,7 +11,7 @@ public interface CauldronRecipeProvider {
      * {@code
      * public class MyModCauldronRecipes implements CauldronRecipeProvider {
      *     @Override
-     *     public void addCauldronRecipes() {
+     *     public void init() {
      *         CauldronRecipe recipe = new CauldronRecipe(CauldronRecipeRegistry.DeviceType.NORMAL, "MyRecipe")
      *             .setRecipeItem(new ItemStack(Items.DIRT))
      *             .setResultItem(new ItemStack(Items.DIAMOND));
@@ -21,5 +21,5 @@ public interface CauldronRecipeProvider {
      * }
      * </pre>
      */
-    void addCauldronRecipes();
+    void init();
 }
